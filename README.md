@@ -24,6 +24,8 @@ because the Web App is designed to be used on **Local Offline Wifi or LAN**,
 on Hackathons, HackLabs, Meetups, Workshops, and IRL Events,
 check `firejails` or `docker` for this, disable if you expect malware code.
 
+[For a better online solution check Nim Playground!.](https://play.nim-lang.org)
+
 
 # Requisites
 

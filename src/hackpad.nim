@@ -23,7 +23,6 @@ proc crosscompile*(code, target, opt, release, gc, app, ssls, threads: string): 
       temp_file_exe = temp_file_nim.replace(".nim", ".exe")
       temp_file_html = temp_file_nim.replace(".nim", ".html")
     writeFile(temp_file_nim,  code)
-    logs &= temp_file_nim
     var
       output: string
       exitCode: int
