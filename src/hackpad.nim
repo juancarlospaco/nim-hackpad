@@ -1,4 +1,4 @@
-import jester, strutils, strformat, os, ospaths, osproc, times, json, uri, tables, cgi
+import jester, strutils, strformat, os, ospaths, osproc, times, uri, tables, cgi
 import zip/zipfiles
 
 const
@@ -11,7 +11,7 @@ const
   linux_args* = "" ## Linux Bash command line extra parameters for CrossCompilation on demand, for target Linux.
   windows_args* = "--gcc.exe:/usr/bin/x86_64-w64-mingw32-gcc --gcc.linkerexe:/usr/bin/x86_64-w64-mingw32-gcc"  ## Windows Bash command line extra parameters for CrossCompilation on demand, for target Windows.
 createDir(temp_folder)
-type CrossCompileResult = tuple[
+type CrossCompileResult* = tuple[
   win, winzip, winsha, lin, linzip, linsha, doc, doczip, logs, jsf, jszip, jssha: string]  ## Tuple with full path string to binaries and SHA1 Sum of binaries.
 
 proc crosscompile*(code, target, opt, release, gc, app, ssls, threads: string): CrossCompileResult =
@@ -117,27 +117,21 @@ routes:
       threads = if args.hasKey("threads"): "-d:threads" else: ""
       strips = if args.hasKey("strip"): true else: false
       x = crosscompile(code, target, opt, release, gc, app, ssls, threads)
-
     resp html_download & fmt"""
     <div id="downloadsframe"> <b>Windows</b><br>
       <a href="{x.win}" title="{x.win}">Windows Executable</a>
       <a href="{x.winzip}" title="{x.winzip}">Zipped Windows Executable</a><br>
-      <small>{x.winsha}</small>
-      <hr> <b>Linux</b><br>
+      <small>{x.winsha}</small> <hr> <b>Linux</b><br>
       <a href="{x.lin}" title="{x.lin}">Linux Executable</a>
       <a href="{x.linzip}" title="{x.linzip}">Zipped Linux Executable</a><br>
-      <small>{x.linsha}</small>
-      <hr> <b>JavaScript</b><br>
+      <small>{x.linsha}</small> <hr> <b>JavaScript</b><br>
       <a href="{x.jsf}" title="{x.jsf}" target="_blank">JavaScript Executable</a>
       <a href="{x.jszip}" title="{x.jszip}">Zipped JavaScript Executable</a><br>
-      <small>{x.jssha}</small>
-      <hr> <b>Documentation</b><br>
+      <small>{x.jssha}</small> <hr> <b>Documentation</b><br>
       <a href="{x.doc}" title="{x.doc}" target="_blank">HTML Self-Documentation</a>
       <a href="{x.doczip}" title="{x.doczip}">Zipped HTML Self-Documentation</a><br>
-    </div>
-    <details open > <summary>Log</summary>
+    </div> <details open > <summary>Log</summary>
       <textarea id="log" title="CrossCompilation Logs (Read-Only)" readonly >
-      {request.headers.table} {x.logs}
-      </textarea>
+      {request.headers.table} {x.logs} </textarea>
     </details><br><button title="Go Back" onclick="history.back()">Back</button></body>
     """  # TODO: Add Android support, install https://aur.archlinux.org/packages/android-sdk-ndk-symlink/.
