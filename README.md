@@ -19,6 +19,8 @@
 
 # CrossCompilation On Demand
 
+**This is for Local Offline Wifi or LAN only.**
+
 The Web App will reply any valid `*.nim` plain text source code file with
 CrossCompiled stripped native binary executables for Linux and Windows,
 including the SHA1 CheckSums directly on the browser (it compiles, does not run).
