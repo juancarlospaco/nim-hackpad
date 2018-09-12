@@ -10,4 +10,5 @@ bin           = @["hackpad"]
 # Dependencies
 
 requires "nim >= 0.18.1"
-requires jester
+requires "jester"
+requires "zip"
