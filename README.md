@@ -46,3 +46,5 @@ mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-headers mingw-w64-winpt
 Usually only installing `mingw-w64-gcc` gets all the rest as dependency.
 
 Names are from ArchLinux AUR, should be similar on other Distros.
+
+Requires NodeJS installed, for JavaScript Compilation.
