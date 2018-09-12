@@ -2,6 +2,10 @@
 
 - Hackathon Web Scratchpad for teaching Nim on events using Wifi with limited or no Internet.
 
+![HackPad](temp1.png "HackPad")
+
+![HackPad](temp0.png "HackPad")
+
 
 # Install
 
