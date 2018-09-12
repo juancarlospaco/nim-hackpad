@@ -105,7 +105,6 @@ routes:
 
   post "/compile":  ## Compiles the source code.
     setStaticDir(request, temp_folder)
-    echo request.headers.table
     let
       args = parseResponseBody(request.body)
       target = args["target"]
@@ -121,22 +120,24 @@ routes:
 
     resp html_download & fmt"""
     <div id="downloadsframe"> <b>Windows</b><br>
-      <a href="{x.win}" title="{x.win}">Windows Executable</a><br>
+      <a href="{x.win}" title="{x.win}">Windows Executable</a>
       <a href="{x.winzip}" title="{x.winzip}">Zipped Windows Executable</a><br>
-      <input type="text" title="SHA1 CheckSum" value="{x.winsha}" readonly /><br>
+      <small>{x.winsha}</small>
       <hr> <b>Linux</b><br>
-      <a href="{x.lin}" title="{x.lin}">Linux Executable</a><br>
+      <a href="{x.lin}" title="{x.lin}">Linux Executable</a>
       <a href="{x.linzip}" title="{x.linzip}">Zipped Linux Executable</a><br>
-      <input type="text" title="SHA1 CheckSum" value="{x.linsha}" readonly /><br>
+      <small>{x.linsha}</small>
       <hr> <b>JavaScript</b><br>
-      <a href="{x.jsf}" title="{x.jsf}" target="_blank">JavaScript Executable</a><br>
+      <a href="{x.jsf}" title="{x.jsf}" target="_blank">JavaScript Executable</a>
       <a href="{x.jszip}" title="{x.jszip}">Zipped JavaScript Executable</a><br>
-      <input type="text" title="SHA1 CheckSum" value="{x.jssha}" readonly /><br>
-      <hr> <b>Self-Documentation</b><br>
-      <a href="{x.doc}" title="{x.doc}" target="_blank">HTML Documentation</a><br>
-      <a href="{x.doczip}" title="{x.doczip}">Zipped HTML Documentation</a><br>
+      <small>{x.jssha}</small>
+      <hr> <b>Documentation</b><br>
+      <a href="{x.doc}" title="{x.doc}" target="_blank">HTML Self-Documentation</a>
+      <a href="{x.doczip}" title="{x.doczip}">Zipped HTML Self-Documentation</a><br>
     </div>
     <details open > <summary>Log</summary>
-      <textarea id="log" title="Compilation Logs (Read-Only)" readonly >{x.logs}</textarea>
+      <textarea id="log" title="CrossCompilation Logs (Read-Only)" readonly >
+      {request.headers.table} {x.logs}
+      </textarea>
     </details> </body>
     """  # TODO: Add Android support, install https://aur.archlinux.org/packages/android-sdk-ndk-symlink/.
