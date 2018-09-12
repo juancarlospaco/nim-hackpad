@@ -1,0 +1,35 @@
+<head>
+  <meta charset="utf-8"/>
+  <title>Nim  HackPad</title>
+  <link rel=icon type="image/x-icon" href="https://nim-lang.org/assets/img/logo_bw.png">
+  <meta name=author content="Juan Carlos"/>
+  <meta name=description content="Hackathon Web Scratchpad for teaching Nim">
+</head>
+<style>
+body {
+  font-family: "FantasqueSans Nerd Mono", "Fira Code Mono", "Ubuntu Mono", monospace;
+  background: #fff;
+  background:
+    linear-gradient(limegreen, transparent),
+    linear-gradient(90deg, skyblue, transparent),
+    linear-gradient(-90deg, lightcyan, transparent);
+  background-blend-mode: screen;
+}
+textarea, #downloadsframe {
+  background: #fff;
+  border-radius: 9px;
+  width: 99%;
+  padding: 3px;
+}
+#log {
+  background-color: lightgrey;
+}
+button, input[type=text] {
+  width: 99%;
+}
+</style>
+<body>
+  <center>
+  <h3>CrossCompile Downloads</h3>
+  <button title="Go Back" onclick="history.back()">Back</button>
+  <br><br>

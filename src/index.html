@@ -1,0 +1,157 @@
+<head>
+  <meta charset="utf-8"/>
+  <title>Nim  HackPad</title>
+  <link rel=icon type="image/x-icon" href="https://nim-lang.org/assets/img/logo_bw.png">
+  <meta name=author content="Juan Carlos"/>
+  <meta name=description content="Hackathon Web Scratchpad for teaching Nim">
+</head>
+<body>
+    <form action="/compile" method="post">
+      <textarea name="code" id="code" placeholder="Write your Nim code here..." autofocus required ></textarea>
+      <select id="examples" title="Click to load Nim source code examples">
+        <option disabled selected >Click to load Nim source code examples</option>
+        <option value="foo">Hello World</option>
+        <option value="foo">Hello World</option>
+        <option value="foo">Hello World</option>
+        <option value="foo">Hello World</option>
+        <option value="foo">Hello World</option>
+        <option value="foo">Hello World</option>
+        <option value="foo">Hello World</option>
+      </select>
+      <br>
+      <details open >
+        <summary>Config</summary>
+        <div id="configframe">
+          <select name="target" id="target" title="Backend Compilation Target">
+              <option value="c">Target C</option>
+              <option value="cpp">Target C++</option>
+              <option disabled >Target JavaScript</option>
+              <option disabled >Target NodeJS</option>
+              <option disabled >Target Objective C</option>
+          </select>
+          <small>
+            Nim Backend Compilation Target, C and C++ are supported by HackPad,
+            but Nim also has JavaScript and Objective C, including support for NodeJS.
+          </small>
+          <hr>
+          <select name="opt" id="opt" title="Backend Optimization">
+            <option value="--opt:none">No Optimize</option>
+            <option value="--opt:size">Optimize for Size</option>
+            <option value="--opt:speed">Optimize for Speed</option>
+          </select>
+          <small>
+            Nim Backend will do the best to Optimize for Speed or Size,
+            Speed might result on a slightly bigger binary but faster,
+            Size might result on a slightly smaller file size binary but slower.
+            You can also omit this parameter.
+          </small>
+          <hr>
+          <select name="release" id="release" title="Enable/Disable Compile parameter Release">
+            <option value="">Build for Develop</option>
+            <option value="-d:release">Build for Release</option>
+          </select>
+          <small>
+            Nim Backend will do the best to Optimize for the kind of task you are working on,
+            Build for Release might result on a slightly slower build but smaller file size binary,
+            Automatic Dead Code Clean Up is enabled, Release builds are ready for Production.
+            Build for Develop might result on a slightly faster build but bigger file size binary,
+            Release builds are meant for development, testing, stating, quick hacks, etc.
+          </small>
+          <hr>
+          <select name="gc" id="gc" title="Garbage Collector">
+              <option value="">Default RefC Garbage Collector</option>
+              <option value="--gc:v2">V2 Garbage Collector</option>
+              <option value="--gc:markAndSweep">Mark&Sweep Garbage Collector</option>
+              <option value="--gc:boehm">Boehm Garbage Collector</option>
+              <option value="--gc:go">Go Lang Garbage Collector</option>
+              <option value="--gc:regions">Regions Garbage Collector</option>
+              <option value="--gc:none">No Garbage Collector</option>
+          </select>
+          <small>
+            The Memory Garbage Collector that Nim should use, AKA GC,
+            No Garbage Collector means you have to code your own Memory managment manually.
+            V2 is Experimental. Go Garbage Collector is similar to Go Langs.
+            <a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">Whats Garbage Collector?.</a>,
+            <a href="https://en.wikipedia.org/wiki/Boehm_garbage_collector">Whats Boehm algorithm?.</a>,
+            <a href="https://en.wikipedia.org/wiki/Mark_and_sweep">Whats Mark&Sweep algorithm?.</a>,
+            <a href="https://nim-lang.org/docs/gc.html">Documentation for Garbage Collector.</a>
+          </small>
+          <hr>
+          <select name="app" id="app" title="Application Type">
+            <option value="">None</option>
+            <option value="--app:console">Console App</option>
+            <option value="--app:gui">GUI App</option>
+            <option value="--app:lib">Dynamic Library</option>
+            <option value="--app:staticlib">Static Library</option>
+          </select>
+          <small>
+            Choose which kind of App or Library you want Nim to generate,
+            Terminal Console App, Graphical User Interface App,
+            Dynamic Library or Static library. You can also omit this parameter.
+          </small>
+          <hr>
+          <input type="checkbox" name="ssl" id="ssl" title="Enable/Disable Compile parameter SSL">
+          Enable Compile with SSL, for HTTPS support, slightly bigger file size binary but allows to use HTTPS URLs.
+          </checkbox>
+          <hr>
+          <input type="checkbox" name="threads" id="threads" title="Enable/Disable Compile parameter Threads">
+          Enable Compile with Threads support, allows to use Multi-Threading, does not affect Async and MultiSync code.
+          </checkbox>
+          <hr>
+          <a href="https://nim-lang.org/docs" title="Official Docs">Official Docs</a>,
+          <a href="https://nim-lang.org/docs/theindex.html" title="Search with CTRL+F">TheIndex</a>,
+          <a href="https://devdocs.io/nim/" title="Works Offline">DevDocs</a>,
+          <a href="https://github.com/juancarlospaco/nim-hackpad#nim-hackpad" title="Improve this Web App!">HackPad Git</a>.
+        <div>
+      </details>
+      <br>
+      <button title="Compile the source code and return the results">Compile</button>
+    </div>
+  </form>
+  <button title="Clear the source code" onclick="document.querySelector('#code').value=''">Clear</button>
+</body>
+<style>
+body {
+  font-family: "FantasqueSans Nerd Mono", "Fira Code Mono", "Ubuntu Mono", monospace;
+  background: #fff;
+  background:
+    linear-gradient(limegreen, transparent),
+    linear-gradient(90deg, skyblue, transparent),
+    linear-gradient(-90deg, lightcyan, transparent);
+  background-blend-mode: screen;
+}
+textarea, #configframe {
+  background: #fff;
+  border-radius: 9px;
+  width: 99%;
+  padding: 3px;
+}
+#log {
+  background-color: lightgrey;
+}
+#code {
+  min-height: 25%;
+}
+button {
+  width: 99%;
+}
+select {
+  min-width: 200px;
+}
+</style>
+<script>
+function textareaCharacterCount(id) {
+    // Create a textarea with Character Count
+    var ta = document.getElementById(id);
+    var el = document.createElement('p');
+    if ( !!ta ) {
+        ta.onkeydown = function() { checkCharCount() };
+        ta.parentNode.insertBefore(el, ta.nextSibling);
+
+        function checkCharCount() {
+            el.innerHTML = el.title = ta.value.length;
+        };
+  };
+};
+textareaCharacterCount("code");
+</script>
