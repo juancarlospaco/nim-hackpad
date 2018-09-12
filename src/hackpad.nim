@@ -139,5 +139,5 @@ routes:
       <textarea id="log" title="CrossCompilation Logs (Read-Only)" readonly >
       {request.headers.table} {x.logs}
       </textarea>
-    </details> </body>
+    </details><br><button title="Go Back" onclick="history.back()">Back</button></body>
     """  # TODO: Add Android support, install https://aur.archlinux.org/packages/android-sdk-ndk-symlink/.
