@@ -15,6 +15,18 @@
 - `./hackpad`
 
 
+# CrossCompilation On Demand
+
+The Web App will reply any valid `*.nim` plain text source code file with
+CrossCompiled stripped native binary executables for Linux and Windows,
+including the SHA1 CheckSums directly on the browser (it compiles, does not run).
+
+No extra hardening security features are in place for this feature,
+because the Web App is designed to be used on **Local Offline Wifi or LAN**,
+on Hackathons, HackLabs, Meetups, Workshops, and IRL Events,
+check `firejails` or `docker` for this, disable if you expect malware code.
+
+
 # Requisites
 
 Linux -> Windows CrossCompile, this allows to generate a `*.EXE` for Windows on Linux.
