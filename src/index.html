@@ -10,6 +10,12 @@
       <select id="examples" title="Click to load Nim source code examples">
 <option disabled selected >Click to load Nim source code examples</option>
 <option value='echo "Hello World!."'>Hello World</option>
+<option value='echo "a"
+echo("b")
+echo"c"
+"d".echo
+"e".echo()
+'>UFCS Universal Function Call Syntax</option>
 <option value="proc sum2integers(a, b: int): int =
   a + b
 
@@ -32,7 +38,10 @@ setBackgroundColor(bgBlack)
 for i in 0..9:
   setForegroundColor([fgRed, fgGreen, fgYellow, fgBlue, fgMagenta, fgCyan, fgWhite].rand)
   echo i
-'>Print Color</option>
+'>Full Print Color</option>
+<option value='import terminal
+styledEcho(bgRed, "Red")
+'>Basic Print Color</option>
 <option value='proc main(): auto =
   echo "Do something here."
 
@@ -45,17 +54,22 @@ routes:
   get "/":
     resp "Hello Web"
 '>Web App Jester</option>
+<option value='proc generico[T](x, y: T): auto =
+  if x < y: x else: y
+
+echo generico(2, 3)         # int
+echo generico("foo", "bar") # string
+'>Generics</option>
 <option value='var conditional = true
 
-# if...else
 if conditional:
   echo "true"
 else:
   echo "false"
-
-# inline if...else
-echo if conditional: "true" else: "false"
 '>If...Else</option>
+<option value='var conditional = true
+echo if conditional: "true" else: "false"
+'>Ternary Operator</option>
 <option value='import strutils
 echo "abc".toUpperAscii
 echo "ABC".toLowerAscii
@@ -237,7 +251,7 @@ echo readFile("/tmp/test.txt")
 '>I/O Files</option>
 <option value='import tables
 echo {"ab": 1, "cd": 2, "fg": 42}.to_table
-'>Basic Tables</option>
+'>Tables</option>
 <option value='import httpclient, json
 echo get("http://httpbin.org/get").body.parse_json
 '>HTTP GET to JSON</option>
@@ -300,7 +314,7 @@ echo x"foo bar baz"
 '>Function String Literals</option>
 <option value='assert 2 > 1
 assert 1 > 2, "Error Message here."
-'>Basic Assert</option>
+'>Assert</option>
 <option value='import unittest
 
 suite "Just Testing":
@@ -315,6 +329,69 @@ suite "Just Testing":
     expect AssertionError:
       assert true == false
 '>Unittest Expect Errors</option>
+<option value='when compiles(int):
+  echo "int type exists"
+when not compiles(Foo):
+  echo "Foo type does not exist"
+when compiles(3 + 4):
+  echo "int +  int Compiles Ok"
+when not compiles(3 @@@ 4):
+  echo "@@@ Does Not Compiles"
+'>When Compiles</option>
+<option value='block:
+  echo "This is a Block"
+  let a = "foo"
+  var b = "bar"
+  echo a
+  echo b
+
+# echo a  # Error: undeclared identifier: a.
+# echo b  # Error: undeclared identifier: b.
+'>Blocks</option>
+<option value='echo (func: auto = "Gatitos")()'>Basic Anonymous Function</option>
+<option value='echo sizeof(float32)
+echo sizeof(float64)
+echo sizeof(float)
+'>Float Sizes</option>
+<option value='import os
+proc handler() {.noconv.} =
+  raise newException(Exception, "Error Message Here.")
+
+setControlCHook(handler)
+sleep 9999  # Press CTRL+C.
+'>CTRL+C Hooks</option>
+<option value='iterator iterator_generic[T](thing: T): auto =
+  for i in countdown(thing.high, thing.low):
+    yield thing[i]
+
+for cosa in "foo bar baz".iterator_generic:
+  echo cosa
+
+for cosa in [1, 2, 3, 4, 5].iterator_generic:
+  echo cosa
+'>Generic Iterators</option>
+<option value='iterator iterame(thing: string): char =
+  for i in countdown(thing.high, thing.low):
+    yield thing[i]
+
+for letra in "foo bar baz".iterame:
+  echo letra
+'>Iterators</option>
+<option value='import sequtils
+echo [14, 35, -7, 46, 98].min
+echo [14, 35, -7, 46, 98].max
+'>Seq Min Max</option>
+<option value='proc fibonacci(n: int): int =
+  if n <= 2: 1 else: fibonacci(n - 1) + fibonacci(n - 2)
+
+echo fibonacci(9)
+'>Fibonacci</option>
+<option value='import sequtils
+echo filter_it([49, 58, 76, 82, 88, 90], it > 60)
+'>Filter List</option>
+<option value='import sequtils
+echo [49, 58, 76, 82, 88, 90].map_it(it * 2)
+'>Map List</option>
     </select>
       <br>
       <details open >
