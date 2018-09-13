@@ -17,6 +17,7 @@
 - `./hackpad`
 
 - English and Spanish is supported.
+- Run `nim doc hackpad.nim` for more Docs.
 
 
 # CrossCompilation On Demand
