@@ -6,19 +6,23 @@ const
   html_template = static_read("index.html")     ## Main Index HTML Template for the pad.
   html_download = static_read("downloads.html") ## HTML Template for Downloads.
   windows_args* = "--gcc.exe:/usr/bin/x86_64-w64-mingw32-gcc --gcc.linkerexe:/usr/bin/x86_64-w64-mingw32-gcc"  ## Windows Bash command line extra parameters for CrossCompilation on demand, for target Windows.
+  android_args* = "--gcc.exe:/opt/android-ndk/toolchains/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-gcc --gcc.linkerexe:/opt/android-ndk/toolchains/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-gcc" ## Android Bash command line extra parameters for CrossCompilation on demand, for target Android.
 createDir(temp_folder)
-type CompileResult* = tuple[win, winzip, winsha, lin, linzip, linsha, doc, doczip, logs, jsf, jszip, jssha: string]  ## Tuple with full path string to binaries and SHA1 Sum of binaries.
+type CompileResult* = tuple[
+  win, winzip, winsha, lin, linzip, linsha, doc, doczip, logs,
+  jsf, jszip, jssha, andr, andrzip, andrsha: string] ## Tuple with full path string to binaries and SHA1 Sum of binaries.
 
 proc crosscompile*(code, target, opt, release, gc, app, ssls, threads: string): CompileResult =
   ## Receives code as string and crosscompiles and generates HTML Docs, Strips and ZIPs.
-  var win, winzip, winsha, lin, linzip, linsha, doc, doczip, logs, jsf, jszip, jssha: string
+  var win, winzip, winsha, lin, linzip, linsha, doc, doczip, logs, jsf, jszip, jssha, andr, andrzip, andrsha: string
   if countLines(code.strip) >= 1:
     let
       temp_file_nim = temp_folder / "hackpad" & $epochTime().int & ".nim"
-      temp_file_bin = temp_file_nim.replace(".nim", "")
+      temp_file_bin = temp_file_nim.replace(".nim", ".bin")  # .bin is not really needed, but some browsers complain of no file extension.
       temp_file_exe = temp_file_nim.replace(".nim", ".exe")
       temp_file_html = temp_file_nim.replace(".nim", ".html")
       temp_file_js = temp_file_nim.replace(".nim", ".js")
+      temp_file_andr = temp_file_nim.replace(".nim", ".android.bin")
     writeFile(temp_file_nim,  code)
     var
       output: string
@@ -71,7 +75,24 @@ proc crosscompile*(code, target, opt, release, gc, app, ssls, threads: string): 
         z.addFile(temp_file_js)
         z.close
         jszip = splitPath(temp_file_js & ".zip").tail
-    # HTML Docs.
+    # Android Compilation.
+    (output, exitCode) = execCmdEx(fmt"nim c --os:android {release} {opt} {android_args} --out:{temp_file_andr} {temp_file_nim}")
+    logs &= output
+    if exitCode == 0:
+      (output, exitCode) = execCmdEx(fmt"{strip_cmd} {temp_file_andr}")
+      logs &= output
+      if exitCode == 0:
+        andr = splitPath(temp_file_andr).tail
+        (output, exitCode) = execCmdEx(fmt"sha1sum {temp_file_andr}")
+        logs &= output
+        if exitCode == 0:
+          andrsha = output
+          var z: ZipArchive
+          discard z.open(temp_file_andr & ".zip", fmWrite)
+          z.addFile(temp_file_andr)
+          z.close
+          andrzip = splitPath(temp_file_andr & ".zip").tail
+    # HTML Docs Generation.
     (output, exitCode) = execCmdEx(fmt"nim doc --out:{temp_file_html} {temp_file_nim}")
     logs &= output
     if exitCode == 0:
@@ -82,8 +103,9 @@ proc crosscompile*(code, target, opt, release, gc, app, ssls, threads: string): 
       z.close
       doczip = splitPath(temp_file_html & ".zip").tail
   let resultaditos: CompileResult = (
-    win: win, winzip: winzip, winsha: winsha.strip, lin: lin, linzip: linzip, linsha: linsha.strip,
-    doc: doc, doczip: doczip, logs: logs, jsf: jsf, jszip: jszip, jssha: jssha)
+    win: win, winzip: winzip, winsha: winsha.strip, lin: lin, linzip: linzip,
+    linsha: linsha.strip, doc: doc, doczip: doczip, logs: logs, jsf: jsf,
+    jszip: jszip, jssha: jssha, andr: andr, andrzip: andrzip, andrsha: andrsha)
   result = resultaditos
 
 proc parseResponseBody(body: string): Table[string, string] =
@@ -100,28 +122,26 @@ routes:
   post "/compile":  ## Compiles the source code.
     setStaticDir(request, temp_folder)
     let
-      args = parseResponseBody(request.body)
-      target = args["target"]
-      code = decodeUrl(args["code"])
-      opt = decodeUrl(args["opt"])
-      release = decodeUrl(args["release"])
-      gc = decodeUrl(args["gc"])
-      app = decodeUrl(args["app"])
-      ssls = if args.hasKey("ssl"): "-d:ssl" else: ""
-      threads = if args.hasKey("threads"): "-d:threads" else: ""
-      strips = if args.hasKey("strip"): true else: false
-      x = crosscompile(code, target, opt, release, gc, app, ssls, threads)
+      a = parseResponseBody(request.body)
+      ssls = if a.hasKey("ssl"):     "-d:ssl"     else: ""
+      trea = if a.hasKey("threads"): "-d:threads" else: ""
+      x = crosscompile(
+        decodeUrl(a["code"]), a["target"], decodeUrl(a["opt"]),
+        decodeUrl(a["release"]), decodeUrl(a["gc"]), decodeUrl(a["app"]), ssls, trea)
     resp html_download & fmt"""
     <div id="downloadsframe"> <b>Windows</b><br>
       <a href="{x.win}" title="{x.win}">Windows Executable</a>
       <a href="{x.winzip}" title="{x.winzip}">Zipped Windows Executable</a><br>
-      <small>{x.winsha}</small> <hr> <b>Linux</b><br>
+      <small title="SHA1 CheckSum">{x.winsha}</small> <hr> <b>Linux</b><br>
       <a href="{x.lin}" title="{x.lin}">Linux Executable</a>
       <a href="{x.linzip}" title="{x.linzip}">Zipped Linux Executable</a><br>
-      <small>{x.linsha}</small> <hr> <b>JavaScript</b><br>
+      <small title="SHA1 CheckSum">{x.linsha}</small> <hr> <b>JavaScript</b><br>
       <a href="{x.jsf}" title="{x.jsf}" target="_blank">JavaScript Executable</a>
       <a href="{x.jszip}" title="{x.jszip}">Zipped JavaScript Executable</a><br>
-      <small>{x.jssha}</small> <hr> <b>Documentation</b><br>
+      <small title="SHA1 CheckSum">{x.jssha}</small> <hr> <b>Android</b><br>
+      <a href="{x.andr}" title="{x.andr}">Android Executable</a>
+      <a href="{x.andrzip}" title="{x.andrzip}">Zipped Android Executable</a><br>
+      <small title="SHA1 CheckSum">{x.andrsha}</small> <hr> <b>Documentation</b><br>
       <a href="{x.doc}" title="{x.doc}" target="_blank">HTML Self-Documentation</a>
       <a href="{x.doczip}" title="{x.doczip}">Zipped HTML Self-Documentation</a><br>
     </div> <details open > <summary>Log</summary>
