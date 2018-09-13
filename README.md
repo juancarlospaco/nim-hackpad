@@ -16,6 +16,8 @@
 
 - `./hackpad`
 
+- English and Spanish is supported.
+
 
 # CrossCompilation On Demand
 
