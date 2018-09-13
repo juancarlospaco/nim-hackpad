@@ -38,7 +38,7 @@ setBackgroundColor(bgBlack)
 for i in 0..9:
   setForegroundColor([fgRed, fgGreen, fgYellow, fgBlue, fgMagenta, fgCyan, fgWhite].rand)
   echo i
-'>Full Print Color</option>
+'>Random Print Color</option>
 <option value='import terminal
 styledEcho(bgRed, "Red")
 '>Basic Print Color</option>
@@ -206,6 +206,45 @@ echo post("http://httpbin.org/post").body
 <option value='import httpclient
 echo post("http://httpbin.org/post", body="foo bar baz").body
 '>HTTP POST Data</option>
+<option value='import httpclient
+downloadFile(url="http://httpbin.org/image/jpeg", outputFilename="temp.jpg", timeout=5000)
+'>HTTP GET Download File</option>
+<option value='import asyncdispatch, httpclient
+proc async_http_get {.async.} = echo await newAsyncHttpClient().getContent "http://httpbin.org/get"
+wait_for async_http_get()
+'>Async HTTP GET</option>
+<option value='import httpclient
+var multipart = newMultipartData()
+multipart["foo"] = "bar"
+echo newHttpClient().postContent("http://httpbin.org/post", multipart=multipart)
+'>HTTP POST MultiPart Data</option>
+<option value='import httpclient
+var client = newHttpClient()
+client.headers["foo"] = "bar"
+echo client.get("http://httpbin.org/get").body
+'>HTTP GET Header Data</option>
+<option value='import asyncdispatch, httpclient
+
+proc printProgress(total, progress, speed: BiggestInt) {.async.} =
+  echo total
+  echo progress
+  echo speed
+
+var client = newAsyncHttpClient()
+client.onProgressChanged = printProgress
+discard wait_for client.getContent("http://speedtest-ams2.digitalocean.com/10mb.test")
+'>Async HTTP GET Progress</option>
+<option value='import httpclient
+
+proc printProgress(total, progress, speed: BiggestInt) =
+  echo total
+  echo progress
+  echo speed
+
+var client = newHttpClient()
+client.onProgressChanged = printProgress
+discard client.getContent("http://speedtest-ams2.digitalocean.com/10mb.test")
+'>HTTP GET Progress</option>
 <option value='type
   Gato* = object
     nombre*, especie*: string
