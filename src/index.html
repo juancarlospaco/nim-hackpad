@@ -8,15 +8,314 @@
     <form action="/compile" method="post">
       <textarea name="code" id="code" placeholder="Type or Paste your Nim code here..." autofocus required ></textarea>
       <select id="examples" title="Click to load Nim source code examples">
-        <option disabled selected >Click to load Nim source code examples</option>
-        <option value="foo">Hello World</option>
-        <option value="foo">Hello World</option>
-        <option value="foo">Hello World</option>
-        <option value="foo">Hello World</option>
-        <option value="foo">Hello World</option>
-        <option value="foo">Hello World</option>
-        <option value="foo">Hello World</option>
-      </select>
+<option disabled selected >Click to load Nim source code examples</option>
+<option value='echo "Hello World!."'>Hello World</option>
+<option value="proc sum2integers(a, b: int): int =
+  a + b
+
+echo sum2integers(1, 2)
+">Function</option>
+<option value='const variable_const = "foo"
+echo variable_const
+
+let variable_let = "let"
+echo variable_let
+
+var variable_var = "bar"
+echo variable_var
+variable_var = "baz"
+echo variable_var
+'>Variables</option>
+<option value='import terminal, random
+randomize()
+setBackgroundColor(bgBlack)
+for i in 0..9:
+  setForegroundColor([fgRed, fgGreen, fgYellow, fgBlue, fgMagenta, fgCyan, fgWhite].rand)
+  echo i
+'>Print Color</option>
+<option value='proc main(): auto =
+  echo "Do something here."
+
+if is_main_module:
+  main()
+'>Basic App Skeleton</option>
+<option value='import jester
+
+routes:
+  get "/":
+    resp "Hello Web"
+'>Web App Jester</option>
+<option value='var conditional = true
+
+# if...else
+if conditional:
+  echo "true"
+else:
+  echo "false"
+
+# inline if...else
+echo if conditional: "true" else: "false"
+'>If...Else</option>
+<option value='import strutils
+echo "abc".toUpperAscii
+echo "ABC".toLowerAscii
+echo "    a    ".strip
+echo "con" & "cat" & "!"
+echo "abc".capitalizeAscii
+echo "A__B__C".normalize
+echo "1 line".countLines
+echo "1 line".splitLines
+echo "a,b,c".split(",")
+echo "abc".toHex
+echo "42".parseInt
+echo "3.14".parseFloat
+echo "0x666".parseHexInt
+echo "TrUe".parseBool
+echo "0o666".parseOctInt
+echo "a".repeat(9)
+echo "a".align(9)
+echo "a".alignLeft(9)
+echo "a".indent(9)
+echo "   a".unindent(1)
+echo "abc".startsWith("ab")
+echo "abc".endsWith("bc")
+echo ["a", "b", "c"].join
+echo "abcd".find("c")
+echo "a".center(9)
+echo "a x a y a z".count("a")
+'>String Utils</option>
+<option value='import strformat
+let
+  a ="can"
+  b ="it"
+  c ="this"
+
+echo fmt"You {a} use {b} like {c}"
+'>Literal String Formatting</option>
+<option value='import random
+randomize()
+for i in 0..9:
+  echo 1.rand.bool
+'>Random Bool</option>
+<option value='import random
+randomize()
+for i in 0..9:
+  echo rand(-9..9)
+'>Random Range</option>
+<option value='var a = 10
+echo a
+inc a
+echo a
+inc a
+echo a
+dec a
+echo a
+dec a
+echo a
+'>Increment Decrement</option>
+<option value='var
+  fooBool: bool
+  fooInt: int
+  fooFloat: float
+  fooString: string
+  fooSeqString: seq[string]
+  fooChar: char
+
+echo fooBool
+echo fooInt
+echo fooFloat
+echo fooString
+echo fooSeqString
+echo fooChar
+'>Variable Autoinitialization</option>
+<option value='echo "a" is string
+echo true is bool
+echo 42 is int
+echo 3.14 is float
+'>Check Type</option>
+<option value='echo 1 + 2
+echo 2 - 1
+echo 2 * 2
+echo 4 / 2
+'>Basic Math Operations</option>
+<option value='# Backend Targets.
+when defined(js):
+  echo "Target is JavaScript"
+when defined(cpp):
+  echo "Target is C++"
+when defined(objc):
+  echo "Target is Objetive C"
+
+# Backend Architectures.
+when defined(amd64):
+  echo "Architecture is x86_64 AMD64 64Bits"
+when defined(i386):
+  echo "Architecture is x86 i386 32Bits"
+when defined(arm):
+  echo "Architecture is ARM"
+
+# Backend Compilers.
+when defined(gcc):
+  echo "Compiler is GNU GCC"
+when defined(clang):
+  echo "Compiler is Clang"
+when defined(tcc):
+  echo "Compiler is Tiny C Compiler"
+when defined(vcc):
+  echo "Compiler is Microsoft Visual C Compiler"
+
+# Backend Operating Systems.
+when defined(linux):
+  echo "OS is GNU Linux"
+when defined(windows):
+  echo "OS is MicroSoft Windows"
+when defined(macosx):
+  echo "OS is Mac OS X"
+when defined(android):
+  echo "OS is Android"
+'>Compile Options</option>
+<option value='import htmlgen
+echo html(body(h1(a(href="http://nim-lang.org", b("Nim")))))
+'>HTML Generation</option>
+<option value='import json
+let jotason =  %*[{"json": "inline", "abcd": ":)"}]
+echo jotason
+echo jotason.pretty
+'>JSON</option>
+<option value='import xmltree
+echo <>xml(href="http://nim-lang.org", title="Nim is Awesome", alt="Nim", newText("Nim"))
+'>XML</option>
+<option value='import httpclient
+echo get("http://httpbin.org/get").body
+echo post("http://httpbin.org/post").body
+'>HTTP GET/POST</option>
+<option value='import httpclient
+echo post("http://httpbin.org/post", body="foo bar baz").body
+'>HTTP POST Data</option>
+<option value='type
+  Gato* = object
+    nombre*, especie*: string
+    comida: range[0..100]
+    pulgas: bool
+
+proc purr*(this: var Gato) =
+  dec this.comida
+  echo "Purr"
+
+proc alimentarlo*(this: var Gato) =
+  inc this.comida
+  echo "Nom nom"
+
+proc lavarlo*(this: var Gato) =
+  this.pulgas = false
+  echo this.pulgas
+
+proc say*(this: Gato, what="Meow") =
+  echo what
+
+proc meow*(this: Gato) = echo "Meow"
+
+
+var gatito = Gato(nombre: "Zoe", especie: "Agora", comida: 50, pulgas: false)
+assert gatito is Gato
+assert(not gatito.pulgas)
+if gatito.comida < 75:
+   for i in 0..9:
+     gatito.alimentarlo()
+for i in 0..9:
+  gatito.purr()
+gatito.pulgas = true
+gatito.lavarlo()
+gatito.meow()
+gatito.say("Meow Meow Meow!")
+'>Basic Objects</option>
+<option value='import os
+echo get_env("HOME")
+'>Environment Variables</option>
+<option value='writeFile("/tmp/test.txt", "Hello")
+echo readFile("/tmp/test.txt")
+'>I/O Files</option>
+<option value='import tables
+echo {"ab": 1, "cd": 2, "fg": 42}.to_table
+'>Basic Tables</option>
+<option value='import httpclient, json
+echo get("http://httpbin.org/get").body.parse_json
+'>HTTP GET to JSON</option>
+<option value="proc is_vowel(c: char): bool =
+  case c
+  of 'a', 'e', 'i', 'o', 'u',
+     'A', 'E', 'I', 'O', 'U':
+    result = true
+  of 'b' .. 'd', 'f' .. 'h', 'j' .. 'n', 'p' .. 't', 'v' .. 'z',
+     'B' .. 'D', 'F' .. 'H', 'J' .. 'N', 'P' .. 'T', 'V' .. 'Z':
+    result = false
+  else:
+    echo '?'
+
+echo is_vowel('A')
+echo is_vowel('c')
+">Chars</option>
+<option value='let variable = true
+
+case variable
+of true:
+  echo "OK"
+else:
+  echo "NO"
+'>Case</option>
+<option value='func sum(x, y: int): int =
+  x + y
+
+echo sum(1, 2)
+'>Functional noSideEffect</option>
+<option value='import strutils
+
+proc `💩`(a: string): string =
+  a.replace(" ", "💩")
+
+echo 💩(" Political Promises ")
+'>Operators Overload</option>
+<option value='# Max capacity.
+echo int8.high
+echo int16.high
+echo int32.high
+echo int64.high
+echo int.high
+# Size on RAM.
+echo sizeOf(int8)
+echo sizeOf(int16)
+echo sizeOf(int32)
+echo sizeOf(int64)
+echo sizeOf(int)
+'>Integers Sizes</option>
+<option value='# Size on RAM.
+echo sizeOf(char)
+echo sizeOf(string)
+echo sizeOf("a")
+'>Chars Sizes</option>
+<option value='proc x(s: string): string =
+  s & " build your own String Literals on the fly!."
+
+echo x"foo bar baz"
+'>Function String Literals</option>
+<option value='assert 2 > 1
+assert 1 > 2, "Error Message here."
+'>Basic Assert</option>
+<option value='import unittest
+
+suite "Just Testing":
+  test "Nim Unittest":
+    check 2 > 1
+    assert 2 > 1
+'>Basic Unittest</option>
+<option value='import unittest
+
+suite "Just Testing":
+  test "test expected to fail":
+    expect AssertionError:
+      assert true == false
+'>Unittest Expect Errors</option>
+    </select>
       <br>
       <details open >
         <summary>Config</summary>
@@ -31,19 +330,27 @@
           <small>
             Nim Backend Compilation Target, C and C++ are supported by HackPad,
             but Nim also has JavaScript and Objective C, including support for NodeJS.
+            <br><br>
+            El objetivo de compilacion de Nim, C y C++ estan soportados por HackPad,
+            pero Nim tambien tiene JavaScript y Objective C, incluido NodeJS.<br>
             <a href="https://nim-lang.org/docs/nimc.html">Documentation for compiler</a>
           </small>
           <hr>
           <select name="opt" id="opt" title="Backend Optimization">
-            <option value="--opt:none">No Optimize</option>
+            <option value="">No Optimize</option>
             <option value="--opt:size">Optimize for Size</option>
             <option value="--opt:speed">Optimize for Speed</option>
           </select>
           <small>
             Nim Backend will do the best to Optimize for Speed or Size,
-            Speed might result on a slightly bigger binary but faster,
-            Size might result on a slightly smaller file size binary but slower.
+            Speed might result on slightly bigger binary but faster,
+            Size might result on smaller file size binary but slower.
             You can also omit this parameter.
+            <br><br>
+            Nim hace el mejor esfuerzo para Optimizar para Velocidad o Peso,
+            Velocidad resulta en un ejecutable un poco mas grande pero mas rapido,
+            Peso resultara en un ejecutable mas liviano pero un poco mas lento.
+            Tambien puedes omitir esta opcion.
           </small>
           <hr>
           <select name="release" id="release" title="Enable/Disable Compile parameter Release">
@@ -55,7 +362,13 @@
             Build for Release might result on a slightly slower build but smaller file size binary,
             Automatic Dead Code Clean Up is enabled, Release builds are ready for Production.
             Build for Develop might result on a slightly faster build but bigger file size binary,
-            Release builds are meant for development, testing, stating, quick hacks, etc.
+            Develop builds are meant for development, testing, staging, quick hacks, etc.
+            <br><br>
+            Nim hace el mejor esfuerzo para Optimizar para el tipo de tarea que estes haciendo,
+            Compilar para Release resultara en compilacion un poco mas lenta pero ejecutable mas liviano,
+            Limpieza Automatica de Codigo Muerto estara habilitada, Compilacion Release es para Produccion.
+            Compilacion para Develop resultara en compilacion mas rapida pero ejecutable un poco mas grande,
+            Develop es para desarrollo, pruebas, hacks, etc.
           </small>
           <hr>
           <select name="gc" id="gc" title="Garbage Collector">
@@ -71,9 +384,14 @@
             The Memory Garbage Collector that Nim should use, AKA GC,
             No Garbage Collector means you have to code your own Memory managment manually.
             V2 is Experimental. Go Garbage Collector is similar to Go Langs.
-            <a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">Whats Garbage Collector?.</a>,
-            <a href="https://en.wikipedia.org/wiki/Boehm_garbage_collector">Whats Boehm algorithm?.</a>,
-            <a href="https://en.wikipedia.org/wiki/Mark_and_sweep">Whats Mark&Sweep algorithm?.</a>,
+            <br><br>
+            El Garbage Collector de Memoria que Nim usara, tambien llamdo GC,
+            No Garbage Collector es para programar tu propio manejo de Memoria manualmente.
+            V2 es Experimental. Go Garbage Collector es similar al de Go Langs.
+            <br>
+            <a href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">Garbage Collector?.</a>,
+            <a href="https://en.wikipedia.org/wiki/Boehm_garbage_collector">Boehm algorithm?.</a>,
+            <a href="https://en.wikipedia.org/wiki/Mark_and_sweep">Mark&Sweep algorithm?.</a>,
             <a href="https://nim-lang.org/docs/gc.html">Documentation for Garbage Collector.</a>
           </small>
           <hr>
@@ -88,14 +406,22 @@
             Choose which kind of App or Library you want Nim to generate,
             Terminal Console App, Graphical User Interface App,
             Dynamic Library or Static library. You can also omit this parameter.
+            <br><br>
+            Que tipo de App o Libreria queres que Nim genere,
+            App de Terminal Consola, App de Interfaz Grafica,
+            Libreria Dinamica o libreria Estatica. Tambien puedes omitir esta opcion.
           </small>
           <hr>
           <input type="checkbox" name="ssl" id="ssl" title="Enable/Disable Compile parameter SSL">
           Enable Compile with SSL, for HTTPS support, slightly bigger file size binary but allows to use HTTPS URLs.
+          <br><br>
+          Habilitar Compilacion con SSL, para HTTPS, ejecutable un poco mas grande pero permite usar URLs HTTPS.
           </checkbox>
           <hr>
           <input type="checkbox" name="threads" id="threads" title="Enable/Disable Compile parameter Threads">
           Enable Compile with Threads support, allows to use Multi-Threading, does not affect Async and MultiSync code.
+          <br><br>
+          Habilitar Compilacion con Threads, permite usar Multi-Threading, no afecta a codigo Async y MultiSync.
           </checkbox>
           <hr>
           <a href="https://nim-lang.org/docs" title="Official Docs">Official Docs</a>,
@@ -141,7 +467,6 @@ select {
 </style>
 <script>
 function textareaCharacterCount(id) {
-    // Create a textarea with Character Count
     var ta = document.getElementById(id);
     var el = document.createElement('p');
     if ( !!ta ) {
@@ -154,4 +479,32 @@ function textareaCharacterCount(id) {
   };
 };
 textareaCharacterCount("code");
+
+function selectShowValue(id) {
+    var ta = document.getElementById(id);
+    var el = document.createElement('p');
+    if ( !!ta ) {
+        ta.onchange = function() { showValue() };
+        ta.parentNode.insertBefore(el, ta.nextSibling);
+
+        function showValue() {
+            el.innerHTML = el.title = ta.value;
+        };
+  };
+};
+selectShowValue("target");
+selectShowValue("opt");
+selectShowValue("release");
+selectShowValue("gc");
+selectShowValue("app");
+
+var examples = document.getElementById("examples");
+var codes    = document.getElementById("code");
+if ( !!examples ) {
+  examples.onchange = function() { setCode() };
+
+  function setCode() {
+    codes.value = examples.options[examples.selectedIndex].value;
+  };
+};
 </script>
