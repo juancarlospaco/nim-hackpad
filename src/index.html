@@ -587,6 +587,10 @@ button {
 select {
   min-width: 200px;
 }
+select > option, select > option:-internal-list-box {
+  -webkit-appearance: menulist-button;
+  height: 90% !important;
+}
 </style>
 <script>
 function textareaCharacterCount(id) {
