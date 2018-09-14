@@ -2,9 +2,9 @@
 
 - Hackathon Web Scratchpad for teaching Nim on events using Wifi with limited or no Internet.
 
-![HackPad](temp1.jpg "HackPad")
+![HackPad](https://raw.githubusercontent.com/juancarlospaco/nim-hackpad/master/temp1.jpg "HackPad")
 
-![HackPad](temp0.jpg "HackPad")
+![HackPad](https://raw.githubusercontent.com/juancarlospaco/nim-hackpad/master/temp0.jpg "HackPad")
 
 
 # Install
